@@ -1,0 +1,139 @@
+{
+  "fixed": {
+    "per_query": [
+      {
+        "query": "What is the initial response time for urgent tickets?",
+        "expected_document": "sla_by_severity.md",
+        "retrieved_documents": [
+          "business_hours_holiday_support.md",
+          "escalation_matrix.md",
+          "sla_by_severity.md"
+        ],
+        "arithmetic": "TP=1, FP=2, FN=0",
+        "precision": 0.3333,
+        "recall": 1.0
+      },
+      {
+        "query": "When does executive escalation happen?",
+        "expected_document": "escalation_matrix.md",
+        "retrieved_documents": [
+          "escalation_matrix.md",
+          "sla_by_severity.md"
+        ],
+        "arithmetic": "TP=1, FP=1, FN=0",
+        "precision": 0.5,
+        "recall": 1.0
+      },
+      {
+        "query": "What refund amount can be approved automatically?",
+        "expected_document": "refund_compensation_policy.md",
+        "retrieved_documents": [
+          "refund_compensation_policy.md",
+          "service_credit_policy.md"
+        ],
+        "arithmetic": "TP=1, FP=1, FN=0",
+        "precision": 0.5,
+        "recall": 1.0
+      },
+      {
+        "query": "Can agents use personal messaging applications?",
+        "expected_document": "customer_communication_channels.md",
+        "retrieved_documents": [
+          "customer_communication_channels.md",
+          "outage_communication_protocol.md"
+        ],
+        "arithmetic": "TP=1, FP=1, FN=0",
+        "precision": 0.5,
+        "recall": 1.0
+      },
+      {
+        "query": "How long are support tickets retained?",
+        "expected_document": "data_retention_policy.md",
+        "retrieved_documents": [
+          "data_retention_policy.md",
+          "escalation_matrix.md",
+          "feedback_collection_process.md"
+        ],
+        "arithmetic": "TP=1, FP=2, FN=0",
+        "precision": 0.3333,
+        "recall": 1.0
+      }
+    ],
+    "micro_precision": 0.4167,
+    "micro_recall": 1.0,
+    "totals": {
+      "TP": 5,
+      "FP": 7,
+      "FN": 0
+    }
+  },
+  "sentence": {
+    "per_query": [
+      {
+        "query": "What is the initial response time for urgent tickets?",
+        "expected_document": "sla_by_severity.md",
+        "retrieved_documents": [
+          "feedback_collection_process.md",
+          "sla_by_severity.md",
+          "ticket_priority_classification.md"
+        ],
+        "arithmetic": "TP=1, FP=2, FN=0",
+        "precision": 0.3333,
+        "recall": 1.0
+      },
+      {
+        "query": "When does executive escalation happen?",
+        "expected_document": "escalation_matrix.md",
+        "retrieved_documents": [
+          "escalation_matrix.md",
+          "ticket_priority_classification.md"
+        ],
+        "arithmetic": "TP=1, FP=1, FN=0",
+        "precision": 0.5,
+        "recall": 1.0
+      },
+      {
+        "query": "What refund amount can be approved automatically?",
+        "expected_document": "refund_compensation_policy.md",
+        "retrieved_documents": [
+          "refund_compensation_policy.md"
+        ],
+        "arithmetic": "TP=1, FP=0, FN=0",
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      {
+        "query": "Can agents use personal messaging applications?",
+        "expected_document": "customer_communication_channels.md",
+        "retrieved_documents": [
+          "customer_communication_channels.md",
+          "outage_communication_protocol.md"
+        ],
+        "arithmetic": "TP=1, FP=1, FN=0",
+        "precision": 0.5,
+        "recall": 1.0
+      },
+      {
+        "query": "How long are support tickets retained?",
+        "expected_document": "data_retention_policy.md",
+        "retrieved_documents": [
+          "data_retention_policy.md",
+          "feedback_collection_process.md",
+          "vip_customer_handling.md"
+        ],
+        "arithmetic": "TP=1, FP=2, FN=0",
+        "precision": 0.3333,
+        "recall": 1.0
+      }
+    ],
+    "micro_precision": 0.4545,
+    "micro_recall": 1.0,
+    "totals": {
+      "TP": 5,
+      "FP": 6,
+      "FN": 0
+    }
+  },
+  "recommendation": "sentence",
+  "recommendation_explanation": "Deploy sentence chunking: it achieved micro precision 0.455 and micro recall 1.000. Fixed chunking achieved micro precision 0.417 and micro recall 1.000; the selected strategy ranks higher by recall, with precision used as the tie-breaker. "
+}

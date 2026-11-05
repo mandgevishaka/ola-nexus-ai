@@ -1,0 +1,302 @@
+OLA DOMAIN SUPPORT AGENT — CAPSTONE ACCEPTANCE TRANSCRIPT
+Execution mode: MOCK_LLM | API keys: none | CrewAI telemetry: disabled
+
+==============================================================================
+PART 1 / TASK 1 — DATASET VALIDATION
+==============================================================================
+{
+  "record_count": 45,
+  "category_counts": {
+    "Product Defect": 9,
+    "Technical Issue": 9,
+    "Billing": 9,
+    "General Inquiry": 9,
+    "Account Access": 9
+  },
+  "status_counts": {
+    "Open": 9,
+    "Resolved": 9,
+    "In Progress": 9,
+    "Escalated": 9,
+    "Closed": 9
+  },
+  "escalated_count": 7,
+  "escalated_percentage": 15.56,
+  "seed": 42,
+  "resolution_time_range_hours": [
+    1.0,
+    48.0
+  ]
+}
+PASS: 45 records; every category >=3; every status >=1; escalation 10%-30%.
+
+==============================================================================
+PART 1 / TASK 2 — KNOWLEDGE BASE
+==============================================================================
+Policy documents: 12
+- ticket_priority_classification.md
+- sla_by_severity.md
+- escalation_matrix.md
+- refund_compensation_policy.md
+- customer_communication_channels.md
+- business_hours_holiday_support.md
+- repeat_complaint_handling.md
+- service_credit_policy.md
+- feedback_collection_process.md
+- vip_customer_handling.md
+- outage_communication_protocol.md
+- data_retention_policy.md
+PASS: 12 required Markdown documents, each containing 3 policy sentences.
+
+==============================================================================
+PART 1 / TASKS 3-4 — DUAL INDEXING AND CALIBRATION
+==============================================================================
+Fixed collection chunks: 24
+Sentence collection chunks: 36
+Measured in-scope top-1 cosine similarities:
+{
+  "What is the initial response time for urgent tickets?": 0.6373645663261414,
+  "How much refund can be approved automatically?": 0.707970142364502,
+  "How are VIP corporate partner tickets routed?": 0.631892204284668
+}
+Measured out-of-scope top-1 cosine similarities:
+{
+  "Give me a recipe for chocolate chip cookies.": 0.05777949094772339,
+  "What is the weather forecast for Tokyo tomorrow?": 0.1643441915512085
+}
+Chosen threshold (midpoint between observed clusters): 0.3981
+
+QUERY: What is the initial response time for urgent tickets?
+ANSWER: Urgent issues require an initial response within 15 minutes and resolution within 4 hours.
+SOURCES: ['feedback_collection_process.md', 'sla_by_severity.md', 'ticket_priority_classification.md']
+TOP1: 0.6374
+
+QUERY: When is executive escalation triggered?
+ANSWER: Executive escalation is triggered when a ticket exceeds its applicable SLA by more than 50 percent.
+SOURCES: ['escalation_matrix.md', 'ticket_priority_classification.md']
+TOP1: 0.7337
+
+QUERY: What refund amount can be approved automatically?
+ANSWER: Refunds up to $50 may be approved automatically, while amounts above $50 require supervisor approval.
+SOURCES: ['refund_compensation_policy.md']
+TOP1: 0.7003
+
+QUERY: Can agents use personal messaging applications?
+ANSWER: Agents must not use personal messaging applications or unencrypted channels to contact customers.
+SOURCES: ['customer_communication_channels.md', 'outage_communication_protocol.md']
+TOP1: 0.6826
+
+QUERY: How long are support tickets retained?
+ANSWER: # Data Retention Policy for Support Tickets Customer support tickets, chat logs, and associated personal records are retained securely for 3 years.
+SOURCES: ['data_retention_policy.md', 'feedback_collection_process.md', 'vip_customer_handling.md']
+TOP1: 0.6698
+
+OUT-OF-SCOPE ANSWER: I don't know based on the available Ola support policies.
+FALLBACK TRIGGERED: True
+
+==============================================================================
+PART 1 / TASK 5 — FIXED VS SENTENCE DOCUMENT-LEVEL PRECISION/RECALL
+==============================================================================
+
+FIXED CHUNKING
+Query: What is the initial response time for urgent tickets?
+Expected: sla_by_severity.md
+Retrieved: ['business_hours_holiday_support.md', 'escalation_matrix.md', 'sla_by_severity.md']
+TP=1, FP=2, FN=0
+Precision=0.33; Recall=1.00
+
+Query: When does executive escalation happen?
+Expected: escalation_matrix.md
+Retrieved: ['escalation_matrix.md', 'sla_by_severity.md']
+TP=1, FP=1, FN=0
+Precision=0.50; Recall=1.00
+
+Query: What refund amount can be approved automatically?
+Expected: refund_compensation_policy.md
+Retrieved: ['refund_compensation_policy.md', 'service_credit_policy.md']
+TP=1, FP=1, FN=0
+Precision=0.50; Recall=1.00
+
+Query: Can agents use personal messaging applications?
+Expected: customer_communication_channels.md
+Retrieved: ['customer_communication_channels.md', 'outage_communication_protocol.md']
+TP=1, FP=1, FN=0
+Precision=0.50; Recall=1.00
+
+Query: How long are support tickets retained?
+Expected: data_retention_policy.md
+Retrieved: ['data_retention_policy.md', 'escalation_matrix.md', 'feedback_collection_process.md']
+TP=1, FP=2, FN=0
+Precision=0.33; Recall=1.00
+
+Micro precision=0.417; micro recall=1.000; totals={'TP': 5, 'FP': 7, 'FN': 0}
+
+SENTENCE CHUNKING
+Query: What is the initial response time for urgent tickets?
+Expected: sla_by_severity.md
+Retrieved: ['feedback_collection_process.md', 'sla_by_severity.md', 'ticket_priority_classification.md']
+TP=1, FP=2, FN=0
+Precision=0.33; Recall=1.00
+
+Query: When does executive escalation happen?
+Expected: escalation_matrix.md
+Retrieved: ['escalation_matrix.md', 'ticket_priority_classification.md']
+TP=1, FP=1, FN=0
+Precision=0.50; Recall=1.00
+
+Query: What refund amount can be approved automatically?
+Expected: refund_compensation_policy.md
+Retrieved: ['refund_compensation_policy.md']
+TP=1, FP=0, FN=0
+Precision=1.00; Recall=1.00
+
+Query: Can agents use personal messaging applications?
+Expected: customer_communication_channels.md
+Retrieved: ['customer_communication_channels.md', 'outage_communication_protocol.md']
+TP=1, FP=1, FN=0
+Precision=0.50; Recall=1.00
+
+Query: How long are support tickets retained?
+Expected: data_retention_policy.md
+Retrieved: ['data_retention_policy.md', 'feedback_collection_process.md', 'vip_customer_handling.md']
+TP=1, FP=2, FN=0
+Precision=0.33; Recall=1.00
+
+Micro precision=0.455; micro recall=1.000; totals={'TP': 5, 'FP': 6, 'FN': 0}
+RECOMMENDATION: Deploy sentence chunking: it achieved micro precision 0.455 and micro recall 1.000. Fixed chunking achieved micro precision 0.417 and micro recall 1.000; the selected strategy ranks higher by recall, with precision used as the tie-breaker. 
+Selected collection threshold: 0.3981
+
+==============================================================================
+PART 2 / TASK 6 — TICKET LOOKUP AND ESCALATION SCORE
+==============================================================================
+Formula: 0.7 * escalated + 0.3 * ((30 - days_since_created) / 30)
+80th percentile score threshold: 0.2640
+{
+  "record_id": "TICK-1001",
+  "status": "Open",
+  "resolution_time_hours": 40.6,
+  "escalation_score": 0.76,
+  "escalation_threshold_80th_percentile": 0.264,
+  "recommended_escalation": true
+}
+
+==============================================================================
+PART 2 / TASK 7 — CREWAI THREE-AGENT TOOL EXECUTION
+==============================================================================
+Policy query response: {"answer":"# SLA-by-Severity Policy Service level agreements define the maximum initial response and resolution times for each severity.","confidence":0.5606,"requires_escalation":false}
+Tool calls: {"rag_lookup": 1, "ticket_lookup": 0}
+Crew kickoff count: 1
+Ticket query response: {"answer":"Ticket TICK-1001 is Open. Resolution time: 40.6 hours. Escalation score: 0.7600.","confidence":0.95,"requires_escalation":true}
+Tool calls: {"rag_lookup": 0, "ticket_lookup": 1}
+Crew kickoff count: 2
+
+==============================================================================
+PART 2 / TASK 8 — SESSION MEMORY AND FRESH SESSION
+==============================================================================
+SESSION A / TURN 1: {"answer":"Ticket TICK-1001 is Open. Resolution time: 40.6 hours. Escalation score: 0.7600.","confidence":0.95,"requires_escalation":true}
+SESSION A / TURN 2: {"answer":"I don't know based on the available Ola support policies. Ticket TICK-1001 is Open. Resolution time: 40.6 hours. Escalation score: 0.7600.","confidence":0.0,"requires_escalation":true}
+SESSION A HISTORY MESSAGE COUNT: 4
+SESSION B / FRESH QUERY: {"answer":"I don't know based on the available Ola support policies.","confidence":0.0,"requires_escalation":false}
+SESSION B HISTORY MESSAGE COUNT: 2
+PASS: session A carries the ticket identifier; session B starts without it.
+
+==============================================================================
+PART 2 / TASKS 9-10 — STRUCTURED OUTPUT AND GUARDRAILS
+==============================================================================
+Original phone query: Please call me at +1 415 555 0199 about my ticket.
+Masked model/log query: Please call me at [PHONE REDACTED] about my ticket.
+Phone PII masked: True
+Prompt injection detected: True
+Unsupported answer rejected: True
+Pydantic response validation: {'answer': '# SLA-by-Severity Policy Service level agreements define the maximum initial response and resolution times for each severity.', 'confidence': 0.5606, 'requires_escalation': False}
+
+==============================================================================
+PART 3 / TASKS 11-12 — FASTAPI ENDPOINTS AND JSONL LOGGING
+==============================================================================
+POST /ask status: 200
+POST /ask response: {'trace_id': '22c352b0-7909-4fc9-8132-35808679a766', 'source': 'crew_or_cache', 'response': {'answer': '# SLA-by-Severity Policy Service level agreements define the maximum initial response and resolution times for each severity.', 'confidence': 0.5975, 'requires_escalation': False}}
+POST /add-document status: 200
+POST /add-document response: {'trace_id': 'c9fd17fb-275c-4f12-addd-58acb75501d3', 'message': 'Policy document saved and indexed in both collections.', 'filename': 'sla_by_severity.md'}
+WebSocket response: {'trace_id': '2e4c97d5-4e8d-4c1b-913d-4a07465147a5', 'answer': 'Support request could not be processed. Please try again.', 'status': 'error'}
+JSONL log file: D:\ola-nexus-ai-corrected\logs\requests.jsonl
+
+==============================================================================
+PART 3 / TASK 13 — 15-QUERY MOCK JUDGE EVALUATION
+==============================================================================
+
+15-QUERY EVALUATION (actual crew outputs; deterministic mock judge)
+Q01 ticket_priority_classification: A=1.00 G=1.00 C=1.00 S=1.00
+Q02 sla_by_severity: A=0.00 G=1.00 C=0.00 S=1.00
+Q03 escalation_matrix: A=0.50 G=1.00 C=0.50 S=1.00
+Q04 refund_compensation_policy: A=1.00 G=1.00 C=1.00 S=1.00
+Q05 customer_communication_channels: A=0.50 G=1.00 C=0.50 S=1.00
+Q06 business_hours_holiday_support: A=1.00 G=1.00 C=1.00 S=1.00
+Q07 repeat_complaint_handling: A=0.50 G=1.00 C=0.50 S=1.00
+Q08 service_credit_policy: A=0.50 G=1.00 C=0.50 S=1.00
+Q09 feedback_collection_process: A=0.50 G=1.00 C=0.50 S=1.00
+Q10 vip_customer_handling: A=0.50 G=1.00 C=0.50 S=1.00
+Q11 outage_communication_protocol: A=1.00 G=1.00 C=1.00 S=1.00
+Q12 data_retention_policy: A=1.00 G=1.00 C=1.00 S=1.00
+Q13 pii_edge_case: A=0.00 G=0.00 C=0.00 S=1.00
+Q14 out_of_scope: A=1.00 G=1.00 C=1.00 S=1.00
+Q15 prompt_injection: A=1.00 G=1.00 C=1.00 S=1.00
+AVERAGES: {"accuracy": 0.667, "grounding": 0.933, "completeness": 0.667, "safety": 1.0}
+Evaluation averages: {
+  "accuracy": 0.667,
+  "grounding": 0.933,
+  "completeness": 0.667,
+  "safety": 1.0
+}
+
+==============================================================================
+PART 4 / TASK 14 — AUTOGEN ROUND-ROBIN REVIEW
+==============================================================================
+APPROVAL CASE: {
+  "approved": true,
+  "final_answer": "Urgent issues require a 15-minute initial response and 4-hour resolution.",
+  "reason": "The draft is supported by the supplied policy context and is approved unchanged."
+}
+REVISION CASE: {
+  "approved": false,
+  "final_answer": "Refunds up to $50 may be approved automatically, while amounts above $50 require supervisor approval.",
+  "reason": "The draft contained a monetary claim not supported by the retrieved policy context; it was replaced with the supported statement."
+}
+
+==============================================================================
+PART 4 / TASKS 15-16 — GOVERNANCE, BUDGET AND CACHE
+==============================================================================
+Risk classification: {
+  "level": "Medium",
+  "justification": "The system answers customer-support policy questions and reads support-ticket records. This matches the brief's Medium-risk customer-support category; it does not make medical, hiring, or financial-investment decisions. Ticket escalation remains a recommendation for a human support team rather than an autonomous operational action."
+}
+Least-autonomy access map: {
+  "Retrieval Agent": [
+    "rag_lookup"
+  ],
+  "Lookup Agent": [
+    "check_support_ticket_status"
+  ],
+  "Response Composer": [],
+  "ticket_tool_exclusive_to_lookup_agent": true
+}
+Non-lookup agents blocked from ticket tool: True
+Oversized request correctly rejected: Request rejected: estimated 1500 tokens exceeds per-request cap 1200.
+First response: # Customer Communication Channel Policy Customer support communication must use in-app chat, registered email, or verified phone support.
+Second response: # Customer Communication Channel Policy Customer support communication must use in-app chat, registered email, or verified phone support.
+Kickoffs before=20, after first=21, after second=21
+Cache avoided a second CrewAI/tool run: True
+
+==============================================================================
+FINAL ACCEPTANCE SUMMARY
+==============================================================================
+Dataset validation: PASS
+Knowledge base: PASS
+RAG dual indexing/calibration/evaluation: EXECUTED — inspect reports/rag_calibration.json
+CrewAI tool execution and Pydantic response: EXECUTED
+Session memory and guardrails: EXECUTED
+FastAPI HTTP/WebSocket and JSONL logs: EXECUTED
+15-query evaluation: EXECUTED — inspect reports/evaluation_report.json
+AutoGen approval/revision: EXECUTED
+Governance and cache: EXECUTED
+
+Transcript saved to: D:\ola-nexus-ai-corrected\transcripts\capstone_transcript.txt

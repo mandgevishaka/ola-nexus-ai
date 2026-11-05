@@ -1,0 +1,15 @@
+{
+  "strategy": "sentence",
+  "in_scope_top1_cosine": {
+    "What is the initial response time for urgent tickets?": 0.6373645663261414,
+    "How much refund can be approved automatically?": 0.707970142364502,
+    "How are VIP corporate partner tickets routed?": 0.631892204284668
+  },
+  "out_of_scope_top1_cosine": {
+    "Give me a recipe for chocolate chip cookies.": 0.05777949094772339,
+    "What is the weather forecast for Tokyo tomorrow?": 0.1643441915512085
+  },
+  "lowest_in_scope": 0.631892204284668,
+  "highest_out_of_scope": 0.1643441915512085,
+  "chosen_threshold": 0.39811819791793823
+}
