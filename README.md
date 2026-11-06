@@ -59,7 +59,7 @@ The similarity threshold is dynamically computed at runtime. The system measures
 - **Tool Allocation:** The Lookup Agent exclusively receives `check_support_ticket_status`, the Retrieval Agent receives `rag_lookup`, and the Composer operates without direct tool access.
 - **Mock Engine:** `crew/mock_llm.py` extends CrewAI's `BaseLLM` to return deterministic ReAct tool actions based on declared tool argument schemas, ignoring system-prompt formatting when evaluating tool observations.
 - **Scoring & Escalation:** `crew/tools.py` calculates escalation priority using the formula:
-  $$\text{Score} = 0.7 \times \text{escalated} + 0.3 \times \left(\frac{30 - \text{days\_since\_created}}{30}\right)$$
+  $$\text{Score} = 0.7 \times \text{escalated} + 0.3 \times \left(\frac{30 - \text{days}_{\text{since\_created}}}{30}\right)$$
   The recommendation threshold is set to the 80th percentile of the dataset's score distribution (approximately `0.2640` for seed 42).
 - **Session Memory:** `crew/memory.py` utilizes LangChain's `InMemoryChatMessageHistory` and `RunnableWithMessageHistory` to manage isolated conversational sessions.
 - **Schema Validation:** `crew/schema.py` validates all agent responses using Pydantic models.
