@@ -53,3 +53,5 @@ dist/
 
 # Keep generated evaluation evidence and transcripts
 # Do not ignore reports/ or transcripts/
+
+.flake8
